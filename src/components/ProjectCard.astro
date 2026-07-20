@@ -4,7 +4,7 @@
  */
 import type { CollectionEntry } from 'astro:content';
 import { t, defaultLang, type UIKey } from '../i18n/ui';
-import { base } from '../utils/base';
+import { withBase } from '../utils/base';
 
 interface Props {
   project: CollectionEntry<'projects'>;
@@ -12,7 +12,7 @@ interface Props {
 
 const { project } = Astro.props;
 const { name, description, techStack, repo, demo, status } = project.data;
-const href = `${base}/projects/${project.slug}/`;
+const href = withBase(`/projects/${project.slug}/`);
 
 const STATUS_KEYS: Record<typeof status, UIKey> = {
   active: 'projects.status.active',

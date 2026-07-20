@@ -5,7 +5,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTagMap } from '../../utils/posts';
 import { t, defaultLang } from '../../i18n/ui';
-import { base } from '../../utils/base';
+import { withBase } from '../../utils/base';
 
 const tagMap = await getTagMap();
 const titleLabel = t('tags.title', defaultLang);
@@ -24,7 +24,7 @@ const maxCount = Math.max(1, ...[...tagMap.values()].map((p) => p.length));
           return (
             <li>
               <a
-                href={`${base}/tags/${encodeURIComponent(tag)}/`}
+                href={withBase(`/tags/${encodeURIComponent(tag)}/`)}
                 style={`--scale:${fontScale};`}
               >
                 <span class="tag-name">#{tag}</span>

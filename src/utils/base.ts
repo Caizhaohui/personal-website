@@ -3,26 +3,35 @@
  *
  * Astro exposes the configured `base` via `import.meta.env.BASE_URL`, which
  * already has a leading slash and trailing slash (e.g. `/` or `/repo/`).
- * Use `base` to prefix internal URLs so links work whether the site is
- * served from the domain root or a sub-path.
  *
- *   href={`${base}/posts/`}   // -> '/' or '/repo/'
+ * IMPORTANT: Astro auto-prefixes `base` only for files in `/public` and for
+ * routes it generates. It does NOT auto-prefix hand-written `href="/posts/"`
+ * in components. Such links resolve to the domain root and 404 on project
+ * Pages. Use `withBase()` for every internal link you write by hand.
  *
- * For `src`/`href` of assets in /public, Astro handles base automatically
- * when you use absolute paths starting with the configured base — but
- * string-concatenated routes need this prefix manually.
+ *   withBase('/posts/')              // -> '/posts/' or '/repo/posts/'
+ *   withBase(`/posts/${slug}/`)      // -> '/repo/posts/<slug>/'
  */
 export const base: string =
   (import.meta.env.BASE_URL as string | undefined) ?? '/';
 
 /**
- * Join path segments onto the base, collapsing duplicate slashes.
- *   joinBase('/posts/', 'foo')  // -> '/posts/foo' (or '/repo/posts/foo')
+ * Prefix a site-relative path with the configured base.
+ *
+ * - `/`           → `/` or `/repo/`
+ * - `/posts/`     → `/posts/` or `/repo/posts/`
+ * - `posts/foo/`  → also works (leading slash optional)
+ *
+ * Existing external URLs (http/https/mailto/#) are returned untouched.
  */
-export function joinBase(...parts: string[]): string {
-  const clean = parts
-    .map((p) => p.replace(/^\/+|\/+$/g, ''))
-    .filter(Boolean)
-    .join('/');
-  return `${base.replace(/\/+$/, '')}/${clean}`;
+export function withBase(path: string): string {
+  // Don't touch external links, anchors, or mailto.
+  if (/^(https?:|mailto:|tel:|#|data:)/i.test(path)) return path;
+  // Already prefixed with base (e.g. someone re-applied withBase).
+  if (base !== '/' && path.startsWith(base)) return path;
+  // Normalize leading slash so concatenation is predictable.
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  if (base === '/') return `/${cleanPath}`;
+  return `${base}${cleanPath}`;
 }
+

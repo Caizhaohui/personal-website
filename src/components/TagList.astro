@@ -2,7 +2,7 @@
 /**
  * Inline list of tag chips. Links to /tags/<tag>/.
  */
-import { base } from '../utils/base';
+import { withBase } from '../utils/base';
 
 interface Props {
   tags: string[];
@@ -18,7 +18,7 @@ const { tags, class: className = '' } = Astro.props;
     <ul class={`tag-list ${className}`} list-style="none">
       {tags.map((tag) => (
         <li>
-          <a href={`${base}/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>
+          <a href={withBase(`/tags/${encodeURIComponent(tag)}/`)}>#{tag}</a>
         </li>
       ))}
     </ul>

@@ -8,7 +8,7 @@ import BaseLayout from './BaseLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import TagList from '../components/TagList.astro';
 import { t, defaultLang } from '../i18n/ui';
-import { base } from '../utils/base';
+import { withBase } from '../utils/base';
 import '../styles/prose.css';
 
 interface Props {
@@ -21,7 +21,7 @@ const publishedLabel = t('post.publishedOn', defaultLang);
 const updatedLabel = t('post.updatedOn', defaultLang);
 const tagsLabel = t('post.tags', defaultLang);
 const sourceLabel = t('post.source', defaultLang);
-const backHref = `${base}/posts/`;
+const backHref = withBase('/posts/');
 ---
 
 <BaseLayout title={title} description={description}>

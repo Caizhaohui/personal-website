@@ -6,7 +6,7 @@
 import type { CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
 import TagList from './TagList.astro';
-import { base } from '../utils/base';
+import { withBase } from '../utils/base';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -14,7 +14,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, pubDate, tags } = post.data;
-const href = `${base}/posts/${post.slug}/`;
+const href = withBase(`/posts/${post.slug}/`);
 ---
 
 <article class="post-card">

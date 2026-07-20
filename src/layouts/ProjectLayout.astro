@@ -5,7 +5,7 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import { t, defaultLang } from '../i18n/ui';
-import { base } from '../utils/base';
+import { withBase } from '../utils/base';
 import '../styles/prose.css';
 
 interface Props {
@@ -20,7 +20,7 @@ const STATUS_KEYS = {
   archived: 'projects.status.archived',
 } as const;
 const statusLabel = t(STATUS_KEYS[status], defaultLang);
-const backHref = `${base}/projects/`;
+const backHref = withBase('/projects/');
 ---
 
 <BaseLayout title={name} description={description}>

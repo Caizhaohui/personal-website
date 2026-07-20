@@ -10,7 +10,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostCard from '../../../components/PostCard.astro';
 import { getTagMap } from '../../../utils/posts';
 import { t, defaultLang } from '../../../i18n/ui';
-import { base } from '../../../utils/base';
+import { withBase } from '../../../utils/base';
 
 export async function getStaticPaths() {
   const tagMap = await getTagMap();
@@ -27,7 +27,7 @@ export async function getStaticPaths() {
 
 const { tag, posts } = Astro.props;
 const backLabel = t('tags.back', defaultLang);
-const tagsHref = `${base}/tags/`;
+const tagsHref = withBase('/tags/');
 ---
 
 <BaseLayout title={`#${tag}`}>

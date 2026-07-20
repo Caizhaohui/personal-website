@@ -8,7 +8,7 @@ import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_BIO } from '../consts';
 import { t, defaultLang } from '../i18n/ui';
 import { getPublishedPosts, getProjects } from '../utils/posts';
-import { base } from '../utils/base';
+import { withBase } from '../utils/base';
 
 const posts = await getPublishedPosts();
 const latestPosts = posts.slice(0, 5);
@@ -20,8 +20,8 @@ const fallbackProjects = featuredProjects.length > 0 ? featuredProjects : projec
 const latestLabel = t('home.latestPosts', defaultLang);
 const featuredLabel = t('home.featuredProjects', defaultLang);
 const viewAll = t('home.viewAll', defaultLang);
-const postsHref = `${base}/posts/`;
-const projectsHref = `${base}/projects/`;
+const postsHref = withBase('/posts/');
+const projectsHref = withBase('/projects/');
 ---
 
 <BaseLayout>
