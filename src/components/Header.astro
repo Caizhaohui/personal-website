@@ -5,7 +5,7 @@
  */
 import { SITE_TITLE } from '../consts';
 import { t, defaultLang } from '../i18n/ui';
-import { withBase, base } from '../utils/base';
+import { withBase } from '../utils/base';
 import ThemeToggle from './ThemeToggle.astro';
 
 const navItems = [
@@ -16,18 +16,24 @@ const navItems = [
   { href: '/about/', label: t('nav.about', defaultLang) },
 ] as const;
 
-const path = Astro.url.pathname;
-// Normalize for matching: strip the configured base so `/repo/posts/` → `/posts/`.
-const normalizedPath = (base !== '/' && path.startsWith(base) ? path.slice(base.length - 1) : path) || '/';
+// Normalize: strip configured base from the current pathname so we can
+// compare directly against the bare nav hrefs ("/posts/" etc).
+const rawPath = Astro.url.pathname;
+const basePath = withBase('').replace(/\/$/, ''); // e.g. '' or '/repo'
+const strippedPath =
+  basePath && rawPath.startsWith(basePath) ? rawPath.slice(basePath.length) : rawPath;
+const normalizedPath = strippedPath === '' ? '/' : strippedPath;
 const isActive = (href: string) => {
-  if (href === '/') return normalizedPath === '/' || normalizedPath === '';
+  if (href === '/') return normalizedPath === '/';
   return normalizedPath === href || normalizedPath.startsWith(`${href}`);
 };
+
+const homeHref = withBase('/');
 ---
 
 <header class="site-header">
   <div class="container container--wide header-inner">
-    <a href={base} class="site-title">{SITE_TITLE}</a>
+    <a href={homeHref} class="site-title">{SITE_TITLE}</a>
     <nav class="site-nav" aria-label="主导航">
       <ul>
         {

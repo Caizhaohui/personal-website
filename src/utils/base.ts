@@ -23,15 +23,28 @@ export const base: string =
  * - `posts/foo/`  → also works (leading slash optional)
  *
  * Existing external URLs (http/https/mailto/#) are returned untouched.
+ *
+ * NOTE: Astro's `import.meta.env.BASE_URL` may or may not have a trailing
+ * slash depending on how `base` is configured. We normalize both ends so
+ * the result is always well-formed regardless of the input shape.
  */
 export function withBase(path: string): string {
   // Don't touch external links, anchors, or mailto.
   if (/^(https?:|mailto:|tel:|#|data:)/i.test(path)) return path;
-  // Already prefixed with base (e.g. someone re-applied withBase).
-  if (base !== '/' && path.startsWith(base)) return path;
-  // Normalize leading slash so concatenation is predictable.
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  if (base === '/') return `/${cleanPath}`;
-  return `${base}${cleanPath}`;
+
+  // Normalize base: exactly one trailing slash, or just '/' for root.
+  // Handles both '/' and '/repo' and '/repo/' inputs.
+  const normalizedBase = base === '/' ? '/' : `${base.replace(/\/+$/, '')}/`;
+
+  // Already prefixed? Avoid doubling up.
+  if (normalizedBase !== '/' && (`${path}/`).startsWith(normalizedBase)) {
+    return path;
+  }
+
+  // Strip leading slash(es) from the input path so concatenation is clean.
+  const cleanPath = path.replace(/^\/+/, '');
+
+  return `${normalizedBase}${cleanPath}`;
 }
+
 
