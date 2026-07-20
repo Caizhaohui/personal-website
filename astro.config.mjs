@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { rehypePrefixBase } from './src/plugins/rehype-prefix-base';
 
 // GitHub Pages base path handling:
 //   - username.github.io repo  → base '/'
@@ -23,6 +24,10 @@ export default defineConfig({
       theme: 'github-dark-dimmed',
       wrap: true,
     },
+    // Rewrite site-relative URLs in Markdown bodies (e.g. images, links) to
+    // include the configured base. Without this, `![](/images/x.png)` in a
+    // .md file 404s on project Pages sites.
+    rehypePlugins: [[rehypePrefixBase, { base: SITE_BASE }]],
   },
   integrations: [
     mdx(),
