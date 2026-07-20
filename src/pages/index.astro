@@ -1,0 +1,128 @@
+---
+/**
+ * Homepage: brief hero, latest posts (3-5), featured projects (2-3).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_BIO } from '../consts';
+import { t, defaultLang } from '../i18n/ui';
+import { getPublishedPosts, getProjects } from '../utils/posts';
+import { base } from '../utils/base';
+
+const posts = await getPublishedPosts();
+const latestPosts = posts.slice(0, 5);
+
+const projects = await getProjects();
+const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 3);
+const fallbackProjects = featuredProjects.length > 0 ? featuredProjects : projects.slice(0, 3);
+
+const latestLabel = t('home.latestPosts', defaultLang);
+const featuredLabel = t('home.featuredProjects', defaultLang);
+const viewAll = t('home.viewAll', defaultLang);
+const postsHref = `${base}/posts/`;
+const projectsHref = `${base}/projects/`;
+---
+
+<BaseLayout>
+  <section class="hero">
+    <h1 class="hero__title">{SITE_TITLE}</h1>
+    <p class="hero__bio">{SITE_BIO}</p>
+    <p class="hero__desc">{SITE_DESCRIPTION}</p>
+  </section>
+
+  <section class="section">
+    <div class="section__head">
+      <h2 class="section__title">{latestLabel}</h2>
+      <a href={postsHref} class="section__more">{viewAll}</a>
+    </div>
+    {
+      latestPosts.length > 0 ? (
+        <div class="post-list">
+          {latestPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="empty">{t('posts.empty', defaultLang)}</p>
+      )
+    }
+  </section>
+
+  {
+    fallbackProjects.length > 0 && (
+      <section class="section">
+        <div class="section__head">
+          <h2 class="section__title">{featuredLabel}</h2>
+          <a href={projectsHref} class="section__more">{viewAll}</a>
+        </div>
+        <div class="project-grid">
+          {fallbackProjects.map((project) => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: var(--space-16) 0 var(--space-12);
+    text-align: left;
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin: 0 0 var(--space-4);
+  }
+
+  .hero__bio {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0 0 var(--space-2);
+  }
+
+  .hero__desc {
+    font-size: 1rem;
+    color: var(--color-text-subtle);
+    margin: 0;
+  }
+
+  .section {
+    margin-top: var(--space-12);
+  }
+
+  .section__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+  }
+
+  .section__title {
+    font-size: 1.3rem;
+    font-weight: 650;
+    margin: 0;
+  }
+
+  .section__more {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .empty {
+    color: var(--color-text-subtle);
+    padding: var(--space-8) 0;
+  }
+</style>

@@ -1,0 +1,76 @@
+---
+/**
+ * Minimal footer: copyright, built-with note, optional social links.
+ */
+import { SITE_TITLE, SOCIALS } from '../consts';
+import { t, defaultLang } from '../i18n/ui';
+const year = new Date().getFullYear();
+const builtWith = t('footer.builtWith', defaultLang);
+
+const socialLinks: { label: string; href: string }[] = [];
+if (SOCIALS.github) socialLinks.push({ label: 'GitHub', href: SOCIALS.github });
+if (SOCIALS.jianshu) socialLinks.push({ label: '简书', href: SOCIALS.jianshu });
+if (SOCIALS.email) socialLinks.push({ label: 'Email', href: SOCIALS.email });
+---
+
+<footer class="site-footer">
+  <div class="container container--wide footer-inner">
+    <p class="copyright">© {year} {SITE_TITLE}</p>
+    <nav class="footer-social" aria-label="社交链接">
+      {socialLinks.map((s) => <a href={s.href} target="_blank" rel="noopener noreferrer">{s.label}</a>)}
+    </nav>
+    <p class="built-with">{builtWith}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-16);
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-subtle);
+    font-size: 0.875rem;
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+  }
+
+  .copyright {
+    margin: 0;
+  }
+
+  .footer-social {
+    margin-left: auto;
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .footer-social a {
+    color: var(--color-text-subtle);
+  }
+
+  .footer-social a:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .built-with {
+    margin: 0;
+    color: var(--color-text-subtle);
+  }
+
+  @media (max-width: 560px) {
+    .footer-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-2);
+    }
+    .footer-social {
+      margin-left: 0;
+    }
+  }
+</style>

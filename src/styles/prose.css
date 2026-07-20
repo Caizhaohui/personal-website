@@ -1,0 +1,165 @@
+/* ==========================================================================
+   Article body typography (Markdown/MDX rendered content)
+   Applied to elements with class `.prose`.
+
+   Tuned for Chinese reading: generous line-height, no hanging punctuation
+   surprises, code blocks that don't break layout on long lines.
+   ========================================================================== */
+
+.prose {
+  color: var(--color-text);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.8;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+  .prose {
+    font-size: 1.125rem; /* 18px */
+  }
+}
+
+/* Headings */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-weight: 650;
+  line-height: 1.3;
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  letter-spacing: -0.01em;
+}
+
+.prose h1 {
+  font-size: 2em;
+  margin-top: 0;
+}
+
+.prose h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.prose h3 {
+  font-size: 1.25em;
+}
+
+.prose h4 {
+  font-size: 1.1em;
+}
+
+/* Paragraphs */
+.prose p {
+  margin-bottom: 1.2em;
+}
+
+/* Tighten spacing inside lists */
+.prose li {
+  margin-bottom: 0.4em;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}
+
+/* Blockquote */
+.prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.5em 1em;
+  border-left: 3px solid var(--color-quote-border);
+  color: var(--color-text-muted);
+  background-color: var(--color-bg-muted);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Inline code */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  background-color: var(--color-code-bg);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  word-break: break-word;
+}
+
+/* Code blocks — Shiki output is wrapped in <pre class="astro-code"> */
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  padding: 1em 1.2em;
+  margin: 1.5em 0;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+}
+
+.prose pre code {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  padding: 0.6em 0.9em;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.prose th {
+  background-color: var(--color-bg-muted);
+  font-weight: 600;
+}
+
+.prose tr:nth-child(2n) td {
+  background-color: var(--color-bg-muted);
+}
+
+/* Images */
+.prose img {
+  margin: 1.5em auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Links */
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+}
+
+/* Horizontal rule */
+.prose hr {
+  margin: 2.5em 0;
+}
+
+/* Task list checkboxes (GFM) */
+.prose input[type='checkbox'] {
+  margin-right: 0.4em;
+}

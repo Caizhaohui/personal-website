@@ -1,0 +1,55 @@
+---
+/**
+ * About page — editable copy lives here inline. Swap prose as needed.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE, SITE_BIO, SOCIALS } from '../consts';
+import '../styles/prose.css';
+---
+
+<BaseLayout title="关于">
+  <article class="about">
+    <h1 class="about__title">关于 {SITE_TITLE}</h1>
+    <div class="prose">
+      <p>{SITE_BIO}</p>
+
+      <p>
+        这是我的个人网站，用于记录生物信息学、数据分析、软件开发方面的笔记与项目。
+        内容主要由 <a href={SOCIALS.jianshu} target="_blank" rel="noopener noreferrer">我的简书</a> 迁移而来。
+      </p>
+
+      <h2>联系方式</h2>
+      <ul>
+        {SOCIALS.github && (
+          <li>GitHub：<a href={SOCIALS.github} target="_blank" rel="noopener noreferrer">{SOCIALS.github.replace('https://github.com/', '@')}</a></li>
+        )}
+        {SOCIALS.jianshu && (
+          <li>简书：<a href={SOCIALS.jianshu} target="_blank" rel="noopener noreferrer">{SOCIALS.jianshu}</a></li>
+        )}
+        {SOCIALS.email && (
+          <li>邮箱：<a href={SOCIALS.email}>{SOCIALS.email.replace('mailto:', '')}</a></li>
+        )}
+      </ul>
+
+      <h2>关于本站</h2>
+      <p>
+        本站使用 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a> 构建，
+        托管于 GitHub Pages。源码开放，欢迎交流。
+      </p>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .about__title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    margin: 0 0 var(--space-6);
+    letter-spacing: -0.02em;
+  }
+</style>

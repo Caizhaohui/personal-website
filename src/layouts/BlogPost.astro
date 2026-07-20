@@ -1,0 +1,126 @@
+---
+/**
+ * Layout for a single blog post. Renders title, meta, optional source link,
+ * then the rendered Markdown/MDX body in a `.prose` container.
+ */
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import TagList from '../components/TagList.astro';
+import { t, defaultLang } from '../i18n/ui';
+import { base } from '../utils/base';
+import '../styles/prose.css';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags, source } = post.data;
+const publishedLabel = t('post.publishedOn', defaultLang);
+const updatedLabel = t('post.updatedOn', defaultLang);
+const tagsLabel = t('post.tags', defaultLang);
+const sourceLabel = t('post.source', defaultLang);
+const backHref = `${base}/posts/`;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="post">
+    <a href={backHref} class="back-link">← {t('nav.posts', defaultLang)}</a>
+    <header class="post__header">
+      <h1 class="post__title">{title}</h1>
+      <div class="post__meta">
+        <span class="post__date">
+          {publishedLabel}：<FormattedDate date={pubDate} variant="long" />
+        </span>
+        {
+          updatedDate && (
+            <span class="post__date post__date--updated">
+              · {updatedLabel}：<FormattedDate date={updatedDate} variant="long" />
+            </span>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    {
+      tags.length > 0 && (
+        <footer class="post__footer">
+          <span class="post__tags-label">{tagsLabel}：</span>
+          <TagList tags={tags} />
+        </footer>
+      )
+    }
+    {
+      source && (
+        <p class="post__source">
+          {sourceLabel}：
+          <a href={source} target="_blank" rel="noopener noreferrer">{source}</a>
+        </p>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--color-text-subtle);
+    margin-bottom: var(--space-6);
+  }
+
+  .post__header {
+    margin-bottom: var(--space-8);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post__title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 var(--space-3);
+    letter-spacing: -0.02em;
+  }
+
+  .post__meta {
+    font-size: 0.9rem;
+    color: var(--color-text-subtle);
+  }
+
+  .post__date--updated {
+    margin-left: var(--space-2);
+  }
+
+  .post__footer {
+    margin-top: var(--space-12);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .post__tags-label {
+    color: var(--color-text-subtle);
+    font-size: 0.9rem;
+  }
+
+  .post__source {
+    margin-top: var(--space-4);
+    font-size: 0.85rem;
+    color: var(--color-text-subtle);
+    word-break: break-all;
+  }
+</style>

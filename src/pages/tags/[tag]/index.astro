@@ -1,0 +1,61 @@
+---
+/**
+ * Tag detail: lists all posts under a given tag.
+ * Uses [...slug] under /tags/[tag]/ so we can show posts in place if desired;
+ * here we render an index for each tag.
+ *
+ * Astro getStaticPaths generates one /tags/<tag>/ page per unique tag.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { getTagMap } from '../../../utils/posts';
+import { t, defaultLang } from '../../../i18n/ui';
+import { base } from '../../../utils/base';
+
+export async function getStaticPaths() {
+  const tagMap = await getTagMap();
+  return [...tagMap.keys()].map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: [...tagMap.get(tag)!].sort(
+        (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
+      ),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+const backLabel = t('tags.back', defaultLang);
+const tagsHref = `${base}/tags/`;
+---
+
+<BaseLayout title={`#${tag}`}>
+  <a href={tagsHref} class="back-link">{backLabel}</a>
+  <h1 class="page-title">#{tag}</h1>
+  <p class="count">共 {posts.length} 篇</p>
+  <div class="post-list">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--color-text-subtle);
+    margin: var(--space-8) 0 var(--space-4);
+  }
+
+  .page-title {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 700;
+    margin: 0 0 var(--space-1);
+  }
+
+  .count {
+    color: var(--color-text-subtle);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-4);
+  }
+</style>

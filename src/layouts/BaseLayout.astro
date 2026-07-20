@@ -1,0 +1,35 @@
+---
+/**
+ * Root layout for every page. Renders <html><head><body> skeleton,
+ * imports global styles, mounts Header + Footer.
+ */
+import { SITE_LANG } from '../consts';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** 'wide' uses the wider container; default is content-width. */
+  wide?: boolean;
+}
+
+const { title, description, image, wide = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang={SITE_LANG}>
+  <head>
+    <BaseHead title={title} description={description} image={image} />
+  </head>
+  <body>
+    <Header />
+    <main class={`container ${wide ? 'container--wide' : ''}`}>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,72 @@
+---
+/**
+ * Common <head> content: meta tags, OG, canonical, fonts, favicon.
+ * Props are passed down from each page/layout.
+ */
+import { SITE_TITLE, SITE_LANG } from '../consts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** Override the canonical URL (otherwise derived from Astro.url). */
+  canonical?: string;
+}
+
+const {
+  title = SITE_TITLE,
+  description = '',
+  image,
+  canonical,
+} = Astro.props;
+
+const fullTitle = title === SITE_TITLE ? title : `${title} · ${SITE_TITLE}`;
+const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = image
+  ? new URL(image, Astro.site).href
+  : undefined;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<meta name="lang" content={SITE_LANG} />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={SITE_TITLE} />
+{ogImage && <meta property="og:image" content={ogImage} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+{ogImage && <meta name="twitter:image" content={ogImage} />}
+
+<!-- Sitemap link -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+
+<!-- RSS (placeholder for future) -->
+
+<!-- Fonts: rely on system fonts; no external fetch. -->
+
+<!-- Theme init MUST run before first paint to avoid flash of wrong theme -->
+<script is:inline>
+  // Reads stored theme or falls back to OS preference.
+  (function () {
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = stored ?? (prefersDark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>

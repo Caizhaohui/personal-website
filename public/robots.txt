@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://caizhaohui.github.io/personal-website/sitemap-index.xml

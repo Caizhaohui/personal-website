@@ -1,0 +1,27 @@
+# Normalize line endings to LF in the repo, regardless of OS.
+# Git will check out as-is on Linux/macOS, and convert to CRLF on Windows
+# only for text files marked below. CI runs on Linux so LF is authoritative.
+* text=auto eol=lf
+
+# Source files — always LF
+*.ts text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf
+*.astro text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.mdx text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.html text eol=lf
+
+# Binaries — never touch
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

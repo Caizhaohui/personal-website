@@ -1,0 +1,85 @@
+---
+/**
+ * Tag cloud — all tags with their post counts.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTagMap } from '../../utils/posts';
+import { t, defaultLang } from '../../i18n/ui';
+import { base } from '../../utils/base';
+
+const tagMap = await getTagMap();
+const titleLabel = t('tags.title', defaultLang);
+const countLabel = t('tags.count', defaultLang);
+const maxCount = Math.max(1, ...[...tagMap.values()].map((p) => p.length));
+---
+
+<BaseLayout title={titleLabel}>
+  <h1 class="page-title">{titleLabel}</h1>
+  {
+    tagMap.size > 0 ? (
+      <ul class="tag-cloud" list-style="none">
+        {[...tagMap.entries()].map(([tag, posts]) => {
+          const weight = posts.length / maxCount;
+          const fontScale = 0.9 + weight * 0.7;
+          return (
+            <li>
+              <a
+                href={`${base}/tags/${encodeURIComponent(tag)}/`}
+                style={`--scale:${fontScale};`}
+              >
+                <span class="tag-name">#{tag}</span>
+                <span class="tag-count">{posts.length} {countLabel}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <p class="empty">暂无标签</p>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    margin: var(--space-8) 0 var(--space-6);
+  }
+
+  .tag-cloud {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    padding: 0;
+    margin: 0;
+  }
+
+  .tag-cloud a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    padding: 0.3em 0.8em;
+    background-color: var(--color-tag-bg);
+    border-radius: var(--radius);
+    color: var(--color-tag-text);
+    font-size: calc(1rem * var(--scale, 1));
+    transition: var(--transition-colors);
+  }
+
+  .tag-cloud a:hover {
+    background-color: var(--color-bg-muted);
+    color: var(--color-link);
+    text-decoration: none;
+  }
+
+  .tag-count {
+    font-size: 0.7em;
+    color: var(--color-text-subtle);
+  }
+
+  .empty {
+    color: var(--color-text-subtle);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+/**
+ * Projects index — grid of portfolio cards.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../utils/posts';
+import { t, defaultLang } from '../../i18n/ui';
+
+const projects = await getProjects();
+const titleLabel = t('projects.title', defaultLang);
+---
+
+<BaseLayout title={titleLabel}>
+  <h1 class="page-title">{titleLabel}</h1>
+  {
+    projects.length > 0 ? (
+      <div class="project-grid">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    ) : (
+      <p class="empty">暂无项目</p>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 700;
+    margin: var(--space-8) 0 var(--space-6);
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-12);
+  }
+
+  .empty {
+    color: var(--color-text-subtle);
+    padding: var(--space-8) 0;
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+/**
+ * Locale-aware date renderer. Renders ISO <time datetime> for SEO.
+ */
+interface Props {
+  date: Date;
+  /** 'short' = 2024-01-05, 'long' = 2024年1月5日 */
+  variant?: 'short' | 'long';
+}
+
+const { date, variant = 'short' } = Astro.props;
+
+const iso = date.toISOString();
+const formatted =
+  variant === 'long'
+    ? new Intl.DateTimeFormat('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }).format(date)
+    : new Intl.DateTimeFormat('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+        .format(date)
+        .replace(/\//g, '-');
+---
+
+<time datetime={iso}>{formatted}</time>
