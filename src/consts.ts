@@ -8,7 +8,7 @@ export const SITE_LANG = 'zh-CN';
 
 /** Brief intro shown on the homepage hero and the about page. */
 export const SITE_BIO =
-  '生物信息学爱好者 / 全栈开发者。在这里记录数据分析、工具开发与学习笔记。';
+  '基因编辑工具和生物信息学爱好者，喜欢用 Python、R 和 Rust 语言将混乱的生物数据锤炼成可靠、可复现的解决方案。';
 
 /** Social / contact links shown in header/footer. Leave empty to hide. */
 export const SOCIALS: {
