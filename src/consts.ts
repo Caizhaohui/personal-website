@@ -1,7 +1,7 @@
 /**
  * Site-wide constants. Edit these to customize the site.
  */
-export const SITE_TITLE = '你猜我菜不菜';
+export const SITE_TITLE = 'Caizhaohui';
 export const SITE_DESCRIPTION = '个人博客与项目作品集 — 记录生物信息学、数据分析与软件开发';
 export const SITE_AUTHOR = '你猜我菜不菜';
 export const SITE_LANG = 'zh-CN';
