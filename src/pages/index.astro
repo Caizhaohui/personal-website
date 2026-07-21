@@ -1,27 +1,20 @@
 ---
 /**
- * Homepage: brief hero, latest posts (3-5), featured projects (2-3).
+ * Homepage: brief hero + latest posts (3-5).
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_BIO } from '../consts';
 import { t, defaultLang } from '../i18n/ui';
-import { getPublishedPosts, getProjects } from '../utils/posts';
+import { getPublishedPosts } from '../utils/posts';
 import { withBase } from '../utils/base';
 
 const posts = await getPublishedPosts();
 const latestPosts = posts.slice(0, 5);
 
-const projects = await getProjects();
-const featuredProjects = projects.filter((p) => p.data.featured).slice(0, 3);
-const fallbackProjects = featuredProjects.length > 0 ? featuredProjects : projects.slice(0, 3);
-
 const latestLabel = t('home.latestPosts', defaultLang);
-const featuredLabel = t('home.featuredProjects', defaultLang);
 const viewAll = t('home.viewAll', defaultLang);
 const postsHref = withBase('/posts/');
-const projectsHref = withBase('/projects/');
 ---
 
 <BaseLayout>
@@ -48,22 +41,6 @@ const projectsHref = withBase('/projects/');
       )
     }
   </section>
-
-  {
-    fallbackProjects.length > 0 && (
-      <section class="section">
-        <div class="section__head">
-          <h2 class="section__title">{featuredLabel}</h2>
-          <a href={projectsHref} class="section__more">{viewAll}</a>
-        </div>
-        <div class="project-grid">
-          {fallbackProjects.map((project) => (
-            <ProjectCard project={project} />
-          ))}
-        </div>
-      </section>
-    )
-  }
 </BaseLayout>
 
 <style>
@@ -113,12 +90,6 @@ const projectsHref = withBase('/projects/');
   .section__more {
     font-size: 0.9rem;
     color: var(--color-text-muted);
-  }
-
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-4);
   }
 
   .empty {

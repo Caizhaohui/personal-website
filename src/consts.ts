@@ -13,11 +13,9 @@ export const SITE_BIO =
 /** Social / contact links shown in header/footer. Leave empty to hide. */
 export const SOCIALS: {
   github: string;
-  jianshu: string;
   email: string;
 } = {
   github: 'https://github.com/Caizhaohui', // TODO: replace with your GitHub URL
-  jianshu: 'https://www.jianshu.com/u/36f606498ed2',
   email: '', // e.g. 'mailto:you@example.com'
 };
 
@@ -26,4 +24,3 @@ export const POSTS_PER_PAGE = 10;
 
 /** Posts dir under src/content (used by collections + migration script). */
 export const POSTS_DIR = 'src/content/blog';
-export const PROJECTS_DIR = 'src/content/projects';

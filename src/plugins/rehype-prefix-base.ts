@@ -18,8 +18,7 @@
  *
  * The `base` option should be the Astro base (e.g. '/' or '/repo/').
  */
-import type { Plugin } from 'unified';
-import type { Element, Root } from 'hast';
+import type { Element, Root, ElementContent } from 'hast';
 
 export interface RehypePrefixBaseOptions {
   base: string;
@@ -57,25 +56,30 @@ function prefixSrcset(value: string, base: string): string {
     .map((part) => {
       const trimmed = part.trim();
       const [url, ...rest] = trimmed.split(/\s+/);
-      return rest.length === 0 ? prefixUrl(url, base) : `${prefixUrl(url, base)} ${rest.join(' ')}`;
+      return rest.length === 0
+        ? prefixUrl(url, base)
+        : `${prefixUrl(url, base)} ${rest.join(' ')}`;
     })
     .join(', ');
 }
 
-export const rehypePrefixBase: Plugin<[RehypePrefixBaseOptions], Root> = (
-  options,
-) => {
+/**
+ * Unified transformer factory. Typed loosely as a function returning a
+ * tree visitor to avoid coupling to the `unified` package types directly.
+ */
+export function rehypePrefixBase(options: RehypePrefixBaseOptions) {
   const base = options?.base ?? '/';
-  return (tree) => {
-    visit(tree as Element, base);
+  return (tree: Root): Root => {
+    visit(tree, base);
+    return tree;
   };
-};
+}
 
 /** Recursive DFS over the HAST tree. */
 function visit(node: Element | Root, base: string): void {
   const children = (node as Element).children;
   if (Array.isArray(children)) {
-    for (const child of children) {
+    for (const child of children as ElementContent[]) {
       visit(child as Element, base);
     }
   }
@@ -96,3 +100,4 @@ function visit(node: Element | Root, base: string): void {
 }
 
 export default rehypePrefixBase;
+

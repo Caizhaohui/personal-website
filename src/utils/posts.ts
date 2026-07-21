@@ -1,11 +1,10 @@
 /**
- * Helpers for working with the blog + projects collections.
+ * Helpers for working with the blog collection.
  * Centralized so sorting/filtering is consistent across pages.
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'blog'>;
-export type Project = CollectionEntry<'projects'>;
 
 /**
  * All published posts (drafts excluded in production), newest first.
@@ -18,17 +17,6 @@ export async function getPublishedPosts(): Promise<Post[]> {
   return posts.sort(
     (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
   );
-}
-
-/** All projects sorted by manual `order`, then by date desc. */
-export async function getProjects(): Promise<Project[]> {
-  const projects = await getCollection('projects');
-  return projects.sort((a, b) => {
-    if (a.data.order !== b.data.order) {
-      return a.data.order - b.data.order;
-    }
-    return b.data.pubDate.getTime() - a.data.pubDate.getTime();
-  });
 }
 
 /** Build a map of tag -> posts, sorted by post count desc then name. */

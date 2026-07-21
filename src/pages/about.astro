@@ -15,16 +15,12 @@ import '../styles/prose.css';
 
       <p>
         这是我的个人网站，用于记录生物信息学、数据分析、软件开发方面的笔记与项目。
-        内容主要由 <a href={SOCIALS.jianshu} target="_blank" rel="noopener noreferrer">我的简书</a> 迁移而来。
       </p>
 
       <h2>联系方式</h2>
       <ul>
         {SOCIALS.github && (
           <li>GitHub：<a href={SOCIALS.github} target="_blank" rel="noopener noreferrer">{SOCIALS.github.replace('https://github.com/', '@')}</a></li>
-        )}
-        {SOCIALS.jianshu && (
-          <li>简书：<a href={SOCIALS.jianshu} target="_blank" rel="noopener noreferrer">{SOCIALS.jianshu}</a></li>
         )}
         {SOCIALS.email && (
           <li>邮箱：<a href={SOCIALS.email}>{SOCIALS.email.replace('mailto:', '')}</a></li>

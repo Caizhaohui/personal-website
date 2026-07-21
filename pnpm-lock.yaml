@@ -24,9 +24,15 @@ importers:
       '@biomejs/biome':
         specifier: ^1.9.4
         version: 1.9.4
+      '@types/hast':
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/node':
         specifier: ^22.10.5
         version: 22.20.1
+      '@types/unist':
+        specifier: ^3.0.3
+        version: 3.0.3
       axios:
         specifier: ^1.7.9
         version: 1.18.1
