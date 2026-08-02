@@ -15,9 +15,23 @@ draft: false
 source: https://github.com/Caizhaohui/FretHMM
 ---
 
-> 单分子荧光 / smFRET 轨迹做状态分类时，经典工具 [HaMMy](https://github.com/Ha-SingleMoleculeLab/HaMMy) 很好用，但跨平台、批量、GUI 和后续动力学统计往往要自己拼一堆脚本。我把这套流程用 Python 从零重写成了 [FretHMM](https://github.com/Caizhaohui/FretHMM)，目前到 **v1.6.0**：HMM 分类、批量 Review Grid、ON/OFF 事件、dwell 速率拟合、中英文 GUI 和 Windows 单文件 EXE 都在一条工具链里。这里做个介绍，并记一下近期更新与开发路径。
+> 单分子荧光 / smFRET 轨迹做状态分类时，大家常会用到 Ha 实验室的经典工具 [HaMMy](https://github.com/TJHaLab/HaMMy)（McKinney et al., 2006）。算法本身奠基意义很大，但实际用起来有不少痛点：处理偏慢、文件只能一个接一个跑、没有真正的「导入文件夹批量 + 并行」、也没有成体系的 ON/OFF 事件统计；源码还因 Numerical Recipes 限制需单独申请，跨平台和二次开发都不方便。我就是因为这些不好用的地方，才用 Python 从零重写了 [FretHMM](https://github.com/Caizhaohui/FretHMM)。目前到 **v1.6.0**：HMM 分类、目录批量并行、Review Grid 质控、ON/OFF 与 dwell 速率、中英文 GUI 和 Windows EXE 在一条工具链里。这里介绍一下，并记近期更新与开发路径。
 
-##### 1. 这个工具解决什么问题
+##### 1. 为什么不继续用 HaMMy
+
+先说清楚：HaMMy 在方法上是 smFRET 时间序列 HMM 的经典实现，FretHMM 在输出格式（`*path.dat` / `*report.dat` / `*dwell.dat`）和 TDP 思路上仍向它对齐，方便对照旧结果。
+
+但公开仓库（[TJHaLab/HaMMy](https://github.com/TJHaLab/HaMMy)）基本是 **Windows 安装包 + 用户手册**，不是可脚本化的现代工具链。官方 *HaMMy User Guide* 里有几句很「实锤」：
+
+- **慢**：态数开大时「will run **MUCH MUCH slower**」；论文时代分析甚至要跑到集群上
+- **串行**：选好文件后「**processed one at a time**」，中途关掉程序就只做完一半——没有目录扫描 + 多进程并行
+- **交互式选文件**，不是 `input-dir` 那种批量管线
+- 漂白/闪烁要 **先手工裁掉** 再拟合，工具内没有自动低态窗口过滤
+- 动力学后续靠 **单独的 TDP 程序**（且文档写明当时只有 Windows 版），没有包内的 ON/OFF 事件表与 dwell 指数拟合
+
+所以动机不是「经典工具已经很好、再加几个功能」，而是：**算法思路保留，工程体验重做**——更快、可批量、可审查、可直接出 ON/OFF 与速率，源码 MIT 开放。
+
+##### 2. 这个工具解决什么问题
 
 [FretHMM](https://github.com/Caizhaohui/FretHMM) 面向 **单分子时间序列的 HMM 状态分类**，核心是 Baum-Welch 训练 + Viterbi 解码（基于 hmmlearn），再往下游接到审查与动力学统计。
 
@@ -52,9 +66,9 @@ pip install -e ".[gui]"   # PyInstaller 打包
 
 不装 Python 时，Release 里有 Windows 单文件 `FretHMM.exe`（附 SHA-256 校验）。
 
-##### 2. 快速上手：CLI 六条命令
+##### 3. 快速上手：CLI 六条命令
 
-###### 2.1 `run` — HMM 状态分类
+###### 3.1 `run` — HMM 状态分类
 
 ```bash
 # 单文件，2 态，自动识别格式
@@ -75,7 +89,7 @@ frethmm run --files trace.csv --states 2 --low-state-tail-trim-seconds 5.0
 
 `--input-dir` 会扫 `.csv` / `.dat` / `.txt` / `.tsv`，并自动跳过已有输出文件。单个文件失败不中断整批。
 
-###### 2.2 `review-grid` — 批量视觉审查
+###### 3.2 `review-grid` — 批量视觉审查
 
 ```bash
 frethmm review-grid --input-dir ./traces/ --output review.png --states 2 --rows 4 --cols 8 --workers 4
@@ -96,13 +110,13 @@ frethmm run --files traces/bad_trace.csv --states 3 --guesses "0.1,0.5,0.9" -v
 frethmm run --input-dir ./traces/ --states 2 --workers 4 --output-dir ./results/
 ```
 
-###### 2.3 `tdp` — Transition Density Plot
+###### 3.3 `tdp` — Transition Density Plot
 
 ```bash
 frethmm tdp --input-dir ./results/ --exposure 0.1 --output tdp.png
 ```
 
-###### 2.4 `events` + `dwell-stats` — ON/OFF 与速率
+###### 3.4 `events` + `dwell-stats` — ON/OFF 与速率
 
 ```bash
 # 从 classified 抽 ON/OFF
@@ -119,7 +133,7 @@ frethmm dwell-stats --input ./events/event_details.csv --output-dir ./stats/
 - `on_rate_constant` ≈ 离开 ON 的速率（≈ 动力学里的 \(k_\mathrm{off}\)）
 - `off_rate_constant` ≈ 离开 OFF 的速率（≈ \(k_\mathrm{on}\)）
 
-###### 2.5 `gui`
+###### 3.5 `gui`
 
 ```bash
 frethmm gui
@@ -127,7 +141,7 @@ frethmm gui
 
 GUI 支持多文件夹批次、每文件夹独立态数/模式、Review Grid 导出、ON/OFF 分析入口、输出冲突时选择覆盖 / 取消 / `_v2` 版本目录等。Workers 在 GUI 默认 2（范围 1–4），CLI 默认仍是 1。
 
-##### 3. 输入与输出
+##### 4. 输入与输出
 
 **单通道**（带表头 CSV）：
 
@@ -158,9 +172,9 @@ Time,channel1
 
 CLI 成功跑完还会写 `frethmm_run_manifest_*.json`：命令、参数、版本与依赖信息，方便复现，不拷实验原始数据。
 
-##### 4. 近期重点更新
+##### 5. 近期重点更新
 
-###### 4.1 算法加固（v1.2）：multi-start + BIC
+###### 5.1 算法加固（v1.2）：multi-start + BIC
 
 Baum-Welch 对初值敏感，一次拟合容易掉进差的局部最优。
 
@@ -173,11 +187,11 @@ frethmm run --files trace.csv --states 3 --n-init 1   # 旧行为
 frethmm run --input-dir ./traces/ --states auto --min-states 2 --max-states 5
 ```
 
-###### 4.2 动力学闭环（v1.3–v1.4）：events + dwell-stats
+###### 5.2 动力学闭环（v1.3–v1.4）：events + dwell-stats
 
 分类只是半程。v1.3 把 ON/OFF 抽进包内，v1.4 再加 dwell 分位数与单指数速率拟合。下游纯消费 `*_classified.csv` / `event_details.csv`，不改上游 `run` 语义，回归压力小。
 
-###### 4.3 批次审查与低态窗口（v1.5）
+###### 5.3 批次审查与低态窗口（v1.5）
 
 真实分析很少「一键出图完事」，而是：
 
@@ -188,15 +202,15 @@ frethmm run --input-dir ./traces/ --states auto --min-states 2 --max-states 5
 
 低态窗口过滤从「只砍末尾」改成 **从 0 s 向前找首次持续最低态窗口**，保留到该窗口结束再二次拟合，避免漂白后噪声污染前面状态。
 
-###### 4.4 Windows GUI 真并行（v1.6，当前）
+###### 5.4 Windows GUI 真并行（v1.6，当前）
 
 Windows 上以前 worker 数开大不一定真加速。v1.6 用 **spawn 兼容进程池** 做文件级并行；取消后不再调度新任务，进行中的文件可写完 `*_classified.csv`，取消的 Review Grid **不写出半截 PNG**。
 
-##### 5. 开发路径与体会
+##### 6. 开发路径与体会
 
 | 阶段 | 解决什么 | 收获 |
 | --- | --- | --- |
-| v0.1–v0.3 | 能跑的 HMM + CLI/GUI 骨架 | 模块化 `core/domain/app/viz`，先对齐 HaMMy 心智 |
+| v0.1–v0.3 | 能跑的 HMM + CLI/GUI 骨架 | 模块化 `core/domain/app/viz`；输出兼容 HaMMy 格式，工程侧摆脱其串行 GUI 限制 |
 | v0.4–v1.0 | 可批处理、可审查 | CustomTkinter；Review Grid 把「分类」和「质控」拆开 |
 | v1.2 | 拟合不稳、态数靠猜 | multi-start + BIC；`--n-init 1` 保旧结果可复现 |
 | v1.3–v1.4 | 分类后还要动力学 | events / dwell-stats 纯下游扩展 |
@@ -240,14 +254,16 @@ FretHMM/
 └── README.md / README_zh.md
 ```
 
-##### 6. 小结
+##### 7. 小结
 
 [FretHMM](https://github.com/Caizhaohui/FretHMM) 更适合：
 
 - smFRET / 单分子荧光时间轨迹的 HMM 状态分类  
-- 需要 **批量 + 人工 Review Grid 质控** 的分析流程  
-- 分类之后还要 **ON/OFF、dwell 分布与速率常数** 的下游统计  
+- 需要 **目录批量 + 并行**，以及 **Review Grid 人工质控**  
+- 分类之后还要 **ON/OFF、dwell 分布与速率常数**（HaMMy 没有这条成体系下游）  
 - 希望 Windows 有 EXE、中英文 GUI，同时 CLI 可脚本化复现  
+
+相对 HaMMy：保留其 HMM + 经典输出/TDP 心智，补的是工程侧——速度与并行、文件夹批量、审查闭环、ON/OFF 与速率、开源可改。
 
 最近重心在 **算法加固（multi-start / BIC）**、**动力学闭环（events / dwell-stats）**、**批次审查与低态过滤（v1.5）** 以及 **Windows 真并行与取消安全（v1.6）**。后面如果继续改，大概会优先：更友好的 TDP 批处理报告、更细的拟合 warning 分类，以及与上游轨迹导出流程更紧的衔接。
 
