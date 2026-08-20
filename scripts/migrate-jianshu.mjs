@@ -140,29 +140,53 @@ function imageFilenameFromUrl(url, idx) {
 // than scraping the homepage HTML, which rate-limits and SSR-flashes.
 
 /**
+ * Fetch ALL articles by walking the API's pagination.
+ *
+ * The list endpoint is paginated (the web UI scroll-loads ~9 at a time);
+ * a single request only returns the first page. Keep fetching page=1,2,3…
+ * with count=20 until a page comes back short/empty.
+ *
  * @param {string} userId
  * @returns {Promise<{ slug: string, title: string, date: string }[]>}
  */
 async function getArticleList(userId) {
-  const url = `${JIANSHU_BASE}/asimov/users/slug/${userId}/public_notes`;
-  console.info(`▶ Fetching article list from ${url}`);
-  const res = await fetchWithRetry(url, {
-    Referer: `${JIANSHU_BASE}/u/${userId}`,
-    Accept: 'application/json',
-  });
-  const arr = Array.isArray(res.data) ? res.data : Object.values(res.data);
+  const listUrl = `${JIANSHU_BASE}/asimov/users/slug/${userId}/public_notes`;
+  console.info(`▶ Fetching article list from ${listUrl} (paginated)`);
+
   /** @type {{slug:string,title:string,date:string}[]} */
   const list = [];
-  for (const item of arr) {
-    const note = item?.object?.data ?? item?.data ?? item;
-    if (!note?.slug) continue;
-    list.push({
-      slug: note.slug,
-      title: note.title ?? '',
-      date: note.first_shared_at ?? '',
+  /** @type {Set<string>} */
+  const seen = new Set();
+  const PAGE_SIZE = 20;
+  const MAX_PAGES = 50; // hard stop safety
+
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const res = await fetchWithRetry(`${listUrl}?page=${page}&count=${PAGE_SIZE}`, {
+      Referer: `${JIANSHU_BASE}/u/${userId}`,
+      Accept: 'application/json',
     });
+    const arr = Array.isArray(res.data) ? res.data : Object.values(res.data);
+
+    let added = 0;
+    for (const item of arr) {
+      const note = item?.object?.data ?? item?.data ?? item;
+      if (!note?.slug || seen.has(note.slug)) continue;
+      seen.add(note.slug);
+      list.push({
+        slug: note.slug,
+        title: note.title ?? '',
+        date: note.first_shared_at ?? '',
+      });
+      added++;
+    }
+    console.info(`  page ${page}: ${arr.length} items, ${added} new (total ${list.length})`);
+
+    // Last page reached when fewer items than requested come back.
+    if (arr.length < PAGE_SIZE) break;
+    await politeDelay();
   }
-  console.info(`  found ${list.length} articles`);
+
+  console.info(`  found ${list.length} articles total`);
   return list;
 }
 
