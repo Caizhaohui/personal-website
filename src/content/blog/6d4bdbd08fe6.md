@@ -17,7 +17,7 @@ source: 'https://www.jianshu.com/p/6d4bdbd08fe6'
 
   
 
-![](/images/posts/6d4bdbd08fe6/10821116-e9573af748c20689.png)
+![](/images/posts/6d4bdbd08fe6/10821116-e9573af748c20689.webp)
 
 metagen\_overview.png
 
@@ -292,4 +292,4 @@ anvi-interactive -p merged_profile/PROFILE.db -c contigs.db
 
 ---
 
-![](/images/posts/6d4bdbd08fe6/10821116-a793cfca589c330e.png)
+![](/images/posts/6d4bdbd08fe6/10821116-a793cfca589c330e.webp)

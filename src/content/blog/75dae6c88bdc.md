@@ -12,7 +12,7 @@ source: 'https://www.jianshu.com/p/75dae6c88bdc'
 > 
 >   
 > 
-> ![](/images/posts/75dae6c88bdc/10821116-51be34489f94de7f.jpg)
+> ![](/images/posts/75dae6c88bdc/10821116-51be34489f94de7f.webp)
 > 
 > Managing Your Biological Data with Python
 

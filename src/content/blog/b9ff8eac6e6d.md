@@ -59,7 +59,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-da80c12c2dc00be9.png)
+![](/images/posts/b9ff8eac6e6d/10821116-da80c12c2dc00be9.webp)
 
 指定不同类群的背景颜色。
 
@@ -70,7 +70,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-c3b8b98c972af95b.png)
+![](/images/posts/b9ff8eac6e6d/10821116-c3b8b98c972af95b.webp)
 
 改变不同类群的形状。
 
@@ -81,7 +81,7 @@ p + scale_shape_manual('Groups', values = c(1, 2, 3))
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-5ee16c62aea09c3b.png)
+![](/images/posts/b9ff8eac6e6d/10821116-5ee16c62aea09c3b.webp)
 
 换主题背景，不要背景线和上右边线。
 
@@ -91,7 +91,7 @@ p + theme_classic()
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-f5325f3605e13a40.png)
+![](/images/posts/b9ff8eac6e6d/10821116-f5325f3605e13a40.webp)
 
 将图例放在图的上面。
 
@@ -101,7 +101,7 @@ p + theme(legend.position = 'top')
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-3cd9713328691a46.png)
+![](/images/posts/b9ff8eac6e6d/10821116-3cd9713328691a46.webp)
 
 将不同类群的椭圆背景换成椭圆圈。
 
@@ -112,7 +112,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-68c7c37dee7b5fff.png)
+![](/images/posts/b9ff8eac6e6d/10821116-68c7c37dee7b5fff.webp)
 
 改变不同类群的椭圆圈线性
 
@@ -123,7 +123,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-3605b7f37eb139e7.png)
+![](/images/posts/b9ff8eac6e6d/10821116-3605b7f37eb139e7.webp)
 
 改变不同类群的背景形状
 
@@ -134,7 +134,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-86ee586da23389bf.png)
+![](/images/posts/b9ff8eac6e6d/10821116-86ee586da23389bf.webp)
 
 改变向量标签
 
@@ -147,7 +147,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-5ed7945ea27625ec.png)
+![](/images/posts/b9ff8eac6e6d/10821116-5ed7945ea27625ec.webp)
 
 将每个数据点的值显示出来。
 
@@ -158,7 +158,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-a25b33fc13225f0a.png)
+![](/images/posts/b9ff8eac6e6d/10821116-a25b33fc13225f0a.webp)
 
 将萼片的长度通过数据点的大小显示在图上。
 
@@ -169,7 +169,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-20bca032c9093a57.png)
+![](/images/posts/b9ff8eac6e6d/10821116-20bca032c9093a57.webp)
 
 不同类群分面展示
 
@@ -180,7 +180,7 @@ p
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-edd1b88d72b83e77.png)
+![](/images/posts/b9ff8eac6e6d/10821116-edd1b88d72b83e77.webp)
 
 多元对应分析
 
@@ -195,7 +195,7 @@ ggord(ord, tea$Tea)
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-6cc4a66023a4762d.png)
+![](/images/posts/b9ff8eac6e6d/10821116-6cc4a66023a4762d.webp)
 
 非度量多维尺度分析法
 
@@ -208,7 +208,7 @@ ggord(ord, iris$Species)
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-d78765326609a35f.png)
+![](/images/posts/b9ff8eac6e6d/10821116-d78765326609a35f.webp)
 
 线性判别分析
 
@@ -221,4 +221,4 @@ ggord(ord, iris$Species)
 
 ---
 
-![](/images/posts/b9ff8eac6e6d/10821116-7503679537467a19.png)
+![](/images/posts/b9ff8eac6e6d/10821116-7503679537467a19.webp)

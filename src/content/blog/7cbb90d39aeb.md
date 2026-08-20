@@ -11,11 +11,11 @@ source: 'https://www.jianshu.com/p/7cbb90d39aeb'
 ---
 ###### 对于不同数据集合的比较的可视化，一般用韦恩图来表示，但是数据集合太多了，就不好看了，反而不容易从图中获得信息了。
 
-![](/images/posts/7cbb90d39aeb/10821116-20c4137b4765838e.png)
+![](/images/posts/7cbb90d39aeb/10821116-20c4137b4765838e.webp)
 
 ###### 三个集合看起来最合适。
 
-![](/images/posts/7cbb90d39aeb/10821116-9860df690c94355d.png)
+![](/images/posts/7cbb90d39aeb/10821116-9860df690c94355d.webp)
 
 香蕉基因组
 
@@ -23,7 +23,7 @@ source: 'https://www.jianshu.com/p/7cbb90d39aeb'
 
 ###### 为了解决过多的数据集合造成的信息混乱问题，[UpsetR](https://github.com/hms-dbmi/UpSetR)包应运而生完美解决了这个问题，这个包的使用教程网上也比较多。
 
-![](/images/posts/7cbb90d39aeb/10821116-bb6997a475b003b3.png)
+![](/images/posts/7cbb90d39aeb/10821116-bb6997a475b003b3.webp)
 
 ---
 
@@ -74,7 +74,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
 ## 
 
-![](/images/posts/7cbb90d39aeb/10821116-6a4517734bf10ce1.png)
+![](/images/posts/7cbb90d39aeb/10821116-6a4517734bf10ce1.webp)
 
 不同类型的电影
 
@@ -109,7 +109,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
 ## 
 
-![](/images/posts/7cbb90d39aeb/10821116-84df3b61e22b739c.png)
+![](/images/posts/7cbb90d39aeb/10821116-84df3b61e22b739c.webp)
 
 细分的电影类型
 
@@ -126,7 +126,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
 ## 
 
-![](/images/posts/7cbb90d39aeb/10821116-a1fae80d5ff46bac.png)
+![](/images/posts/7cbb90d39aeb/10821116-a1fae80d5ff46bac.webp)
 
 新的电影分类
 
@@ -143,7 +143,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
 ## 
 
-![](/images/posts/7cbb90d39aeb/10821116-164fb6763ee92b92.png)
+![](/images/posts/7cbb90d39aeb/10821116-164fb6763ee92b92.webp)
 
 不同类型电影之间的关系
 
@@ -151,7 +151,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
   
 
-![](/images/posts/7cbb90d39aeb/10821116-2ce320ba53737b61.png)
+![](/images/posts/7cbb90d39aeb/10821116-2ce320ba53737b61.webp)
 
 ---
 
@@ -167,7 +167,7 @@ Removed 100 rows containing non-finite values (stat_count).
 +     UpSetR::upset(sets = c("Action", "Romance", "Short", "Comedy", "Drama"), keep.order = TRUE)
 ```
 
-![](/images/posts/7cbb90d39aeb/10821116-f0e33438294acb0a.png)
+![](/images/posts/7cbb90d39aeb/10821116-f0e33438294acb0a.webp)
 
 ---
 
@@ -183,7 +183,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
 ## 
 
-![](/images/posts/7cbb90d39aeb/10821116-c9757531159c5c8c.png)
+![](/images/posts/7cbb90d39aeb/10821116-c9757531159c5c8c.webp)
 
 #### 3.更出色的范例
 
@@ -222,7 +222,7 @@ Removed 100 rows containing non-finite values (stat_count).
 
 ## 
 
-![](/images/posts/7cbb90d39aeb/10821116-e2acb56015b5c232.png)
+![](/images/posts/7cbb90d39aeb/10821116-e2acb56015b5c232.webp)
 
 不同类型电影的IMDBD评分情况
 
@@ -263,7 +263,7 @@ Removed 100 rows containing non-finite values (stat_count).
 +     scale_fill_viridis_c()
 ```
 
-![](/images/posts/7cbb90d39aeb/10821116-3d70e62ba8f47a7b.png)
+![](/images/posts/7cbb90d39aeb/10821116-3d70e62ba8f47a7b.webp)
 
 不同类型电影的IMDBD评分
 
