@@ -92,8 +92,11 @@ async function politeDelay() {
  * GET with retries. Throws after MAX_RETRIES failures.
  * @param {string} url
  * @param {object} [extraHeaders]
+ * @param {object} [opts] - { responseType } — pass 'arraybuffer' for binary
+ *   downloads (images). Without it axios decodes the body as UTF-8 text and
+ *   corrupts binary payloads (invalid bytes become U+FFFD).
  */
-async function fetchWithRetry(url, extraHeaders) {
+async function fetchWithRetry(url, extraHeaders, opts) {
   let lastErr;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -101,6 +104,7 @@ async function fetchWithRetry(url, extraHeaders) {
         headers: { 'User-Agent': UA, Accept: 'text/html,application/xhtml+xml', ...extraHeaders },
         timeout: 25000,
         validateStatus: (s) => s < 400,
+        ...(opts?.responseType ? { responseType: opts.responseType } : {}),
       });
       return res;
     } catch (err) {
@@ -273,7 +277,11 @@ async function localizeImages(html, slug, dryRun) {
     }
 
     try {
-      const imgRes = await fetchWithRetry(src, { Referer: JIANSHU_BASE });
+      const imgRes = await fetchWithRetry(
+        src,
+        { Referer: JIANSHU_BASE, Accept: 'image/*' },
+        { responseType: 'arraybuffer' },
+      );
       await writeFile(join(targetDir, filename), imgRes.data);
       $(el).attr('src', relPath);
       // Drop srcset / data-* attributes that point to the CDN.
