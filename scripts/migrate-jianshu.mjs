@@ -24,15 +24,15 @@
  *   - If image download fails, falls back to the original Jianshu URL + warning.
  */
 
-import { mkdir, writeFile, access } from 'node:fs/promises';
 import { constants } from 'node:fs';
+import { access, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import matter from 'gray-matter';
 import TurndownService from 'turndown';
 import * as turndownPluginGfm from 'turndown-plugin-gfm';
-import matter from 'gray-matter';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -288,7 +288,9 @@ async function localizeImages(html, slug, dryRun) {
       $(el).removeAttr('srcset data-original-src');
       downloaded++;
     } catch (err) {
-      console.warn(`    ! image download failed (${src.slice(0, 60)}…): ${/** @type {any} */ (err).message}`);
+      console.warn(
+        `    ! image download failed (${src.slice(0, 60)}…): ${/** @type {any} */ (err).message}`,
+      );
       // Keep the original absolute URL so the article still renders.
       $(el).attr('src', src);
       failed++;
@@ -354,7 +356,7 @@ async function migrateOne({ slug, title: listTitle }, { dryRun, force }) {
   console.info(`\n▶ ${slug}  "${listTitle.slice(0, 40)}"`);
 
   const outPath = join(POSTS_DIR, `${slug}.md`);
-  if (!force && !dryRun && await fileExists(outPath)) {
+  if (!force && !dryRun && (await fileExists(outPath))) {
     console.info('  · already migrated, skipping (use --force to overwrite)');
     return { slug, status: 'skipped' };
   }
@@ -369,7 +371,7 @@ async function migrateOne({ slug, title: listTitle }, { dryRun, force }) {
   console.info(`  date:  ${article.pubDate?.toISOString().slice(0, 10)}`);
 
   const htmlWithLocalImages = await localizeImages(article.bodyHtml, slug, dryRun);
-  const markdown = makeTurndown().turndown(htmlWithLocalImages).trim() + '\n';
+  const markdown = `${makeTurndown().turndown(htmlWithLocalImages).trim()}\n`;
 
   const frontmatter = {
     title: article.title,
@@ -427,10 +429,13 @@ async function main() {
   }
 
   // Summary
-  const tally = results.reduce((acc, r) => {
-    acc[r.status] = (acc[r.status] || 0) + 1;
-    return acc;
-  }, /** @type {Record<string, number>} */ ({}));
+  const tally = results.reduce(
+    (acc, r) => {
+      acc[r.status] = (acc[r.status] || 0) + 1;
+      return acc;
+    },
+    /** @type {Record<string, number>} */ ({}),
+  );
   console.info('\n=== Summary ===');
   for (const [k, v] of Object.entries(tally)) {
     console.info(`  ${k}: ${v}`);

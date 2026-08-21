@@ -4,7 +4,7 @@
  * No sidebar, no mega-menu.
  */
 import { SITE_TITLE } from '../consts';
-import { t, defaultLang } from '../i18n/ui';
+import { defaultLang, t } from '../i18n/ui';
 import { withBase } from '../utils/base';
 import ThemeToggle from './ThemeToggle.astro';
 
@@ -65,12 +65,13 @@ const homeHref = withBase('/');
     display: flex;
     align-items: center;
     gap: var(--space-4);
-    height: 56px;
+    height: 64px;
   }
 
   .site-title {
-    font-weight: 700;
-    font-size: 1.05rem;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.03em;
     color: var(--color-text);
     white-space: nowrap;
   }

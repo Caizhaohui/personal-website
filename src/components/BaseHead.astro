@@ -3,7 +3,7 @@
  * Common <head> content: meta tags, OG, canonical, fonts, favicon.
  * Props are passed down from each page/layout.
  */
-import { SITE_TITLE, SITE_LANG } from '../consts';
+import { SITE_LANG, SITE_TITLE } from '../consts';
 import { withBase } from '../utils/base';
 
 interface Props {
@@ -14,18 +14,11 @@ interface Props {
   canonical?: string;
 }
 
-const {
-  title = SITE_TITLE,
-  description = '',
-  image,
-  canonical,
-} = Astro.props;
+const { title = SITE_TITLE, description = '', image, canonical } = Astro.props;
 
 const fullTitle = title === SITE_TITLE ? title : `${title} · ${SITE_TITLE}`;
 const canonicalURL = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = image
-  ? new URL(image, Astro.site).href
-  : undefined;
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
 ---
 
 <meta charset="utf-8" />

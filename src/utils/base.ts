@@ -12,8 +12,7 @@
  *   withBase('/posts/')              // -> '/posts/' or '/repo/posts/'
  *   withBase(`/posts/${slug}/`)      // -> '/repo/posts/<slug>/'
  */
-export const base: string =
-  (import.meta.env.BASE_URL as string | undefined) ?? '/';
+export const base: string = (import.meta.env.BASE_URL as string | undefined) ?? '/';
 
 /**
  * Prefix a site-relative path with the configured base.
@@ -37,7 +36,7 @@ export function withBase(path: string): string {
   const normalizedBase = base === '/' ? '/' : `${base.replace(/\/+$/, '')}/`;
 
   // Already prefixed? Avoid doubling up.
-  if (normalizedBase !== '/' && (`${path}/`).startsWith(normalizedBase)) {
+  if (normalizedBase !== '/' && `${path}/`.startsWith(normalizedBase)) {
     return path;
   }
 
@@ -46,5 +45,3 @@ export function withBase(path: string): string {
 
   return `${normalizedBase}${cleanPath}`;
 }
-
-

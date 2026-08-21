@@ -18,7 +18,7 @@
  *
  * The `base` option should be the Astro base (e.g. '/' or '/repo/').
  */
-import type { Element, Root, ElementContent } from 'hast';
+import type { Element, ElementContent, Root } from 'hast';
 
 export interface RehypePrefixBaseOptions {
   base: string;
@@ -56,9 +56,7 @@ function prefixSrcset(value: string, base: string): string {
     .map((part) => {
       const trimmed = part.trim();
       const [url, ...rest] = trimmed.split(/\s+/);
-      return rest.length === 0
-        ? prefixUrl(url, base)
-        : `${prefixUrl(url, base)} ${rest.join(' ')}`;
+      return rest.length === 0 ? prefixUrl(url, base) : `${prefixUrl(url, base)} ${rest.join(' ')}`;
     })
     .join(', ');
 }
@@ -100,4 +98,3 @@ function visit(node: Element | Root, base: string): void {
 }
 
 export default rehypePrefixBase;
-

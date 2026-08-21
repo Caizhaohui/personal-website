@@ -2,7 +2,7 @@
  * Helpers for working with the blog collection.
  * Centralized so sorting/filtering is consistent across pages.
  */
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { type CollectionEntry, getCollection } from 'astro:content';
 
 export type Post = CollectionEntry<'blog'>;
 
@@ -14,9 +14,7 @@ export async function getPublishedPosts(): Promise<Post[]> {
   const posts = await getCollection('blog', ({ data }) => {
     return import.meta.env.PROD ? data.draft !== true : true;
   });
-  return posts.sort(
-    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
-  );
+  return posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 }
 
 /** Build a map of tag -> posts, sorted by post count desc then name. */

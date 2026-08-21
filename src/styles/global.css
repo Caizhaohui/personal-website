@@ -20,12 +20,10 @@
   --color-tag-text: #444;
 
   /* Typography */
-  --font-sans:
-    system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
-    'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
-  --font-mono:
-    ui-monospace, 'SF Mono', 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
-    'DejaVu Sans Mono', monospace;
+  --font-sans: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+    "DejaVu Sans Mono", monospace;
 
   /* Sizing */
   --content-width: 720px;
@@ -46,13 +44,22 @@
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.1);
+
+  /* Magazine palette — solid accents for kickers / top bars */
+  --magazine-teal: #0d9488;
+  --magazine-amber: #d97706;
+  --magazine-blue: #2563eb;
+  --magazine-rose: #e11d48;
+  --magazine-olive: #65a30d;
+  --magazine-violet: #7c3aed;
 
   /* Transitions */
-  --transition-colors: color 0.15s ease, background-color 0.15s ease,
-    border-color 0.15s ease;
+  --transition-colors: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  --transition-lift: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --color-bg: #0d1117;
   --color-bg-elevated: #161b22;
   --color-bg-muted: #21262d;
@@ -67,11 +74,19 @@
   --color-quote-border: #30363d;
   --color-tag-bg: #21262d;
   --color-tag-text: #c9d1d9;
+  --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  --magazine-teal: #2dd4bf;
+  --magazine-amber: #fbbf24;
+  --magazine-blue: #60a5fa;
+  --magazine-rose: #fb7185;
+  --magazine-olive: #a3e635;
+  --magazine-violet: #a78bfa;
 }
 
 /* Respect OS preference if user hasn't chosen explicitly */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']):not([data-theme='dark']) {
+  :root:not([data-theme="light"]):not([data-theme="dark"]) {
     --color-bg: #0d1117;
     --color-bg-elevated: #161b22;
     --color-bg-muted: #21262d;
@@ -86,6 +101,14 @@
     --color-quote-border: #30363d;
     --color-tag-bg: #21262d;
     --color-tag-text: #c9d1d9;
+    --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+    --magazine-teal: #2dd4bf;
+    --magazine-amber: #fbbf24;
+    --magazine-blue: #60a5fa;
+    --magazine-rose: #fb7185;
+    --magazine-olive: #a3e635;
+    --magazine-violet: #a78bfa;
   }
 }
 
@@ -120,7 +143,7 @@ body {
   text-rendering: optimizeLegibility;
   transition: background-color 0.2s ease, color 0.2s ease;
   /* Optimize Chinese punctuation rendering */
-  font-feature-settings: 'kern' 1;
+  font-feature-settings: "kern" 1;
 }
 
 img,
@@ -177,6 +200,20 @@ hr {
 
 .container--wide {
   max-width: var(--wide-width);
+}
+
+/* Magazine post card grid — 1 col mobile, 2 cols from 720px */
+.post-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+@media (min-width: 720px) {
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6) var(--space-6);
+  }
 }
 
 /* Visually-hidden but accessible */

@@ -7,13 +7,7 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": [
-      "dist/**",
-      "node_modules/**",
-      ".astro/**",
-      "public/**",
-      "src/content/blog/posts/**"
-    ]
+    "ignore": ["dist/**", "node_modules/**", ".astro/**", "public/**", "src/content/blog/posts/**"]
   },
   "formatter": {
     "enabled": true,
@@ -45,7 +39,7 @@
       "linter": {
         "rules": {
           "style": {
-            "useNodejsAssertProcess": "off"
+            "useNodeAssertStrict": "off"
           }
         }
       }

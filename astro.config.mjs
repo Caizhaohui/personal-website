@@ -1,7 +1,7 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+// @ts-check
+import { defineConfig } from 'astro/config';
 import { rehypePrefixBase } from './src/plugins/rehype-prefix-base';
 
 // GitHub Pages base path handling:
@@ -11,7 +11,7 @@ import { rehypePrefixBase } from './src/plugins/rehype-prefix-base';
 const SITE_URL = process.env.SITE_URL ?? 'https://example.github.io';
 const SITE_BASE = process.env.SITE_BASE ?? '/';
 
-// biome-ignore lint/suspicious/noConsole: log build config once for visibility
+// Log build config once for visibility
 console.info(`[astro config] site=${SITE_URL} base=${SITE_BASE || "''"}`);
 
 // https://astro.build/config
@@ -29,8 +29,5 @@ export default defineConfig({
     // .md file 404s on project Pages sites.
     rehypePlugins: [[rehypePrefixBase, { base: SITE_BASE }]],
   },
-  integrations: [
-    mdx(),
-    sitemap(),
-  ],
+  integrations: [mdx(), sitemap()],
 });

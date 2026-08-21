@@ -22,5 +22,14 @@ export const SOCIALS: {
 /** Number of posts shown on the homepage before "view all". */
 export const POSTS_PER_PAGE = 10;
 
+/** Homepage hero eyebrow label. */
+export const SITE_EYEBROW = '生物信息学笔记';
+
+/**
+ * Decorative topic chips on the homepage hero.
+ * Link to /posts/ (not empty tag pages) — labels only for visual identity.
+ */
+export const SITE_TOPICS = ['生信软件', '数据整理', 'R', 'Python', '基因组'] as const;
+
 /** Posts dir under src/content (used by collections + migration script). */
 export const POSTS_DIR = 'src/content/blog';

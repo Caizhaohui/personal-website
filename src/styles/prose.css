@@ -160,6 +160,6 @@
 }
 
 /* Task list checkboxes (GFM) */
-.prose input[type='checkbox'] {
+.prose input[type="checkbox"] {
   margin-right: 0.4em;
 }

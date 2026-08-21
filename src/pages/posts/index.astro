@@ -1,19 +1,20 @@
 ---
+import PostCard from '../../components/PostCard.astro';
 /**
- * All posts — chronological list.
+ * All posts — magazine card grid.
  */
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
 import { getPublishedPosts } from '../../utils/posts';
 
 const posts = await getPublishedPosts();
 ---
 
-<BaseLayout title="文章">
+<BaseLayout title="文章" wide>
   <h1 class="page-title">文章</h1>
+  <p class="page-count">共 {posts.length} 篇</p>
   {
     posts.length > 0 ? (
-      <div class="post-list">
+      <div class="post-grid">
         {posts.map((post) => (
           <PostCard post={post} />
         ))}
@@ -26,9 +27,16 @@ const posts = await getPublishedPosts();
 
 <style>
   .page-title {
-    font-size: clamp(1.8rem, 4vw, 2.4rem);
-    font-weight: 700;
-    margin: var(--space-8) 0 var(--space-6);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: var(--space-8) 0 var(--space-2);
+  }
+
+  .page-count {
+    color: var(--color-text-subtle);
+    font-size: 0.9rem;
+    margin: 0 0 var(--space-8);
   }
 
   .empty {

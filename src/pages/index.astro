@@ -1,27 +1,39 @@
 ---
+import PostCard from '../components/PostCard.astro';
+import { SITE_BIO, SITE_DESCRIPTION, SITE_EYEBROW, SITE_TITLE, SITE_TOPICS } from '../consts';
+import { defaultLang, t } from '../i18n/ui';
 /**
- * Homepage: brief hero + latest posts (3-5).
+ * Homepage: editorial magazine hero + latest posts grid.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_BIO } from '../consts';
-import { t, defaultLang } from '../i18n/ui';
-import { getPublishedPosts } from '../utils/posts';
 import { withBase } from '../utils/base';
+import { getPublishedPosts } from '../utils/posts';
 
 const posts = await getPublishedPosts();
-const latestPosts = posts.slice(0, 5);
+const latestPosts = posts.slice(0, 6);
 
 const latestLabel = t('home.latestPosts', defaultLang);
 const viewAll = t('home.viewAll', defaultLang);
 const postsHref = withBase('/posts/');
 ---
 
-<BaseLayout>
+<BaseLayout wide>
   <section class="hero">
+    <p class="hero__eyebrow">{SITE_EYEBROW}</p>
     <h1 class="hero__title">{SITE_TITLE}</h1>
     <p class="hero__bio">{SITE_BIO}</p>
     <p class="hero__desc">{SITE_DESCRIPTION}</p>
+    <ul class="hero__topics">
+      {
+        SITE_TOPICS.map((topic) => (
+          <li>
+            <a href={postsHref} class="hero__chip">
+              {topic}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <section class="section">
@@ -31,7 +43,7 @@ const postsHref = withBase('/posts/');
     </div>
     {
       latestPosts.length > 0 ? (
-        <div class="post-list">
+        <div class="post-grid">
           {latestPosts.map((post) => (
             <PostCard post={post} />
           ))}
@@ -46,44 +58,83 @@ const postsHref = withBase('/posts/');
 <style>
   .hero {
     padding: var(--space-16) 0 var(--space-12);
-    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero__eyebrow {
+    font-size: 0.8rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-3);
   }
 
   .hero__title {
-    font-size: clamp(2rem, 6vw, 3.2rem);
+    font-size: clamp(2.8rem, 8vw, 5rem);
     font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    margin: 0 0 var(--space-4);
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin: 0 0 var(--space-6);
   }
 
   .hero__bio {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
     color: var(--color-text-muted);
-    line-height: 1.6;
-    margin: 0 0 var(--space-2);
+    line-height: 1.65;
+    max-width: 40em;
+    margin: 0 0 var(--space-3);
   }
 
   .hero__desc {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--color-text-subtle);
+    margin: 0 0 var(--space-6);
+  }
+
+  .hero__topics {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
     margin: 0;
+  }
+
+  .hero__chip {
+    display: inline-block;
+    padding: 0.35em 0.85em;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    background-color: var(--color-bg-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    transition: var(--transition-colors);
+  }
+
+  .hero__chip:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+    text-decoration: none;
+    background-color: var(--color-bg-elevated);
   }
 
   .section {
     margin-top: var(--space-12);
+    padding-bottom: var(--space-8);
   }
 
   .section__head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
   }
 
   .section__title {
-    font-size: 1.3rem;
-    font-weight: 650;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     margin: 0;
   }
 

@@ -14,10 +14,10 @@
  *
  * Usage: node scripts/fix-image-extensions.mjs [--dry-run]
  */
-import { readdir, readFile, rename, writeFile } from 'node:fs/promises';
-import { join, extname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readFile, readdir, rename, writeFile } from 'node:fs/promises';
+import { extname, join } from 'node:path';
 import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -28,7 +28,13 @@ const dryRun = process.argv.includes('--dry-run');
 
 /** Detect real image format from magic bytes. */
 function detectFormat(buf) {
-  if (buf.length >= 12 && buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46) {
+  if (
+    buf.length >= 12 &&
+    buf[0] === 0x52 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x46
+  ) {
     return 'webp'; // RIFF....WEBP
   }
   if (buf.length >= 8 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
@@ -70,8 +76,7 @@ async function main() {
       // extname() returns '' for extensionless files; slice(0, -0) would
       // truncate to empty string and collide every file onto ".webp".
       // Guard explicitly instead.
-      const stem =
-        currentExt.length > 0 ? file.slice(0, -currentExt.length) : file;
+      const stem = currentExt.length > 0 ? file.slice(0, -currentExt.length) : file;
       const newFile = stem + correctExt;
       if (!newFile || newFile.startsWith('.')) {
         console.warn(`  ! skipping malformed rename target for ${file}`);
