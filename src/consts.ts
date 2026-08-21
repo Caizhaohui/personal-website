@@ -8,7 +8,7 @@ export const SITE_LANG = 'zh-CN';
 
 /** Brief intro shown on the homepage hero and the about page. */
 export const SITE_BIO =
-  '基因编辑工具和生物信息学爱好者，喜欢用 Python、R 和 Rust 语言将混乱的生物数据锤炼成可靠、可复现的解决方案。';
+  '基因编辑工具和生物信息学爱好者，喜欢用 Python、R 和 Rust 语言在混乱的生物数据中挖矿，借助 AI 将分析流程固定成可靠的数据分析工具，这是一个人人都是软件开发者的时代。';
 
 /** Social / contact links shown in header/footer. Leave empty to hide. */
 export const SOCIALS: {
